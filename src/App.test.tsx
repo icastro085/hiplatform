@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import App from './App';
+
+jest.mock('./components/DBProvider');
 
 test('renders learn react link', () => {
   render(<App />);
-  const hello = screen.getByText(/hello/i);
-  expect(hello).toBeInTheDocument();
 });

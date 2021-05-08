@@ -2,6 +2,32 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import ListItem from './ListItem';
 import { IItem } from '../../../models/Items';
 
+jest.mock('../../../hooks/useDb', () => {
+  const useDb = () => {
+    return {
+      save: jest.fn(),
+      get: jest.fn().mockReturnValue({}),
+    }
+  };
+
+  return {
+    useDb,
+  };
+});
+
+jest.mock('../../../components/Icon', () => {
+  return {
+    __esModule: true,
+    default: ({ name }: any) => {
+      if (/chevron/.test(name)) {
+        return <>open-icon</>
+      }
+
+      return <span>icon-{name}</span>;
+    },
+  };
+});
+
 test('should render component with name', async () => {
   const item: IItem = {
     id: 'id-01',

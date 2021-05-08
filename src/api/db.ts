@@ -13,7 +13,7 @@ export const connect = async (): Promise<any> => {
       const db = e?.target?.result;
       db.createObjectStore('items', { keyPath: 'id' });
     }
-  })
+  });
 
   return result;
 }

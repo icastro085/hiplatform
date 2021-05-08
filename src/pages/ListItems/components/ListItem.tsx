@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import Checkbox from '../../../components/Checkbox';
 import Icon from '../../../components/Icon';
@@ -24,7 +24,8 @@ export default function ListItem({
   const [checked, setChecked] = useState<boolean>(false);
   const [hasChildren, setHasChildren] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { save, get, remove } = useDb();
+  const { save, get } = useDb();
+  const isFirstRender = useRef(true);
 
   const handleOnChangeCheckbox = (isChecked: boolean): void => {
     setChecked(isChecked);
@@ -40,7 +41,6 @@ export default function ListItem({
   const handleSave = async (isChecked: boolean, isOpen: boolean) => {
     const { id } = item;
 
-    await remove('items', id);
     await save('items', {
       id,
       isChecked,
@@ -53,8 +53,8 @@ export default function ListItem({
   }, [items]);
 
   useEffect(() => {
-    const { id } = item;
     const handleGet = async () => {
+      const { id } = item;
       const { result } = await get('items', id);
       if (result) {
         setChecked(result?.isChecked);
@@ -64,18 +64,40 @@ export default function ListItem({
 
 
     handleGet();
-  }, [get, item]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    setChecked(isParentChecked);
+    const handleUpated = async () => {
+      const { id } = item;
+
+      const { result } = await get('items', id);
+      save('items', {
+        id,
+        isChecked: isParentChecked,
+        isOpen: result?.isOpen,
+      });
+
+      setChecked(isParentChecked);
+    };
+
+    if (!isFirstRender.current) {
+      handleUpated();
+    }
+
+    isFirstRender.current = false;
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isParentChecked]);
 
   return (
     <S.ListItem>
       <S.ListItemContainer className="flex justify-between items-center">
-        <div className="flex items-center">
-          <Checkbox checked={checked} onChange={handleOnChangeCheckbox} className="mr2" />
-          <S.ListItemLabel>{name}</S.ListItemLabel>
+        <div className="flex items-center md-col-12">
+          <Checkbox checked={checked} onChange={handleOnChangeCheckbox}>
+            <S.ListItemLabel className="ml1">{name}</S.ListItemLabel>
+          </Checkbox>
         </div>
 
         {hasChildren

@@ -17,39 +17,51 @@ export const useDb = () => {
   const { db } = useContext<any>(DBContext);
   
   const save = async (table: string, data: any): Promise<any> => {
-    const result = new Promise((resolved, rejected) => {
-      const transaction = getTransaction(db, table);
-      const request = transaction.put(data);
-    
-      request.onsuccess = (e: any) => resolved(onSuccess(e));
-      request.onerror = (e: any) => rejected(onError(e));
-    });
+    try {
+      const result = new Promise((resolved, rejected) => {
+        const transaction = getTransaction(db, table);
+        const request = transaction.put(data);
+      
+        request.onsuccess = (e: any) => resolved(onSuccess(e));
+        request.onerror = (e: any) => rejected(onError(e));
+      });
 
-    return result;
+      return result;
+    } catch {
+      return null;
+    }
   };
 
   const get = async (table: string, id: string): Promise<any> => {
-    const result = new Promise((resolved, rejected) => {
-      const transaction = getTransaction(db, table);
-      const request = transaction.get(id);
-    
-      request.onsuccess = (e: any) => resolved(onSuccess(e));
-      request.onerror = (e: any) => rejected(onError(e));
-    });
+    try {
+      const result = new Promise((resolved, rejected) => {
+        const transaction = getTransaction(db, table);
+        const request = transaction.get(id);
+      
+        request.onsuccess = (e: any) => resolved(onSuccess(e));
+        request.onerror = (e: any) => rejected(onError(e));
+      });
 
-    return result;
+      return result;
+    } catch {
+      return null;
+    }
   };
 
   const remove = async (table: string, id: string): Promise<any> => {
-    const result = new Promise((resolved, rejected) => {
-      const transaction = getTransaction(db, table);
-      const request = transaction.delete(id);
-    
-      request.onsuccess = (e: any) => resolved(onSuccess(e));
-      request.onerror = (e: any) => rejected(onError(e));
-    });
+    try {
+      const result = new Promise((resolved, rejected) => {
+        const transaction = getTransaction(db, table);
+        const request = transaction.delete(id);
+      
+        request.onsuccess = (e: any) => resolved(onSuccess(e));
+        request.onerror = (e: any) => rejected(onError(e));
+      });
 
-    return result;
+      return result;
+    } catch {
+      return null;
+    }
   };
 
   return {

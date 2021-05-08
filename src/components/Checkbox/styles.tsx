@@ -8,4 +8,6 @@ export const LabelCheckbox = styled.label`
   user-select: none;
   cursor: pointer;
   display: flex;
+  line-height: 3rem;
+  width: 100%;
 `;
