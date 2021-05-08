@@ -7,4 +7,5 @@ export const InputHidden = styled.input`
 export const LabelCheckbox = styled.label`
   user-select: none;
   cursor: pointer;
+  display: flex;
 `;
