@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 
+import Checkbox from '../../../components/Checkbox';
+import Icon from '../../../components/Icon';
+
 import { IItem } from "../../../models/Items";
+import * as S from './styles';
 
 interface Props {
   item: IItem;
@@ -34,17 +38,22 @@ export default function ListItem({
   }, [isParentChecked]);
 
   return (
-    <li>
-      <input
-        data-testid="#checkbox-item"
-        type="checkbox"
-        checked={checked}
-        onChange={(e) => handleOnChangeCheckbox(e.target.checked)} />
-      <label>{checked ? 'checked-icon' : 'unckecked-icon'}</label>
+    <S.ListItem>
+      <S.ListItemContainer className="flex justify-between items-center">
+        <div className="flex items-center">
+          <Checkbox checked={checked} onChange={handleOnChangeCheckbox} className="mr2" />
+          <S.ListItemLabel>{name}</S.ListItemLabel>
+        </div>
 
-      <label>{name}</label>
-      {hasChildren ? <button onClick={() => setIsOpen(!isOpen)}>open-icon</button> : null}
+        {hasChildren
+          ? (
+            <S.IconButton onClick={() => setIsOpen(!isOpen)}>
+              <Icon name={isOpen ? 'chevron-up-solid': 'chevron-down-solid' } width="12px" fill="var(--grey-dark)" />
+            </S.IconButton>
+          )
+          : null}
+      </S.ListItemContainer>
       {hasChildren && isOpen ? renderSubItems(checked) : null}
-    </li>
+    </S.ListItem>
   );
 }
