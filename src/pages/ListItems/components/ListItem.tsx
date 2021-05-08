@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import Checkbox from '../../../components/Checkbox';
 import Icon from '../../../components/Icon';
+import { useDb } from '../../../hooks/useDb';
 
 import { IItem } from "../../../models/Items";
 import * as S from './styles';
@@ -23,15 +24,47 @@ export default function ListItem({
   const [checked, setChecked] = useState<boolean>(false);
   const [hasChildren, setHasChildren] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { save, get, remove } = useDb();
 
   const handleOnChangeCheckbox = (isChecked: boolean): void => {
     setChecked(isChecked);
     onChangeCheckbox(isChecked);
+    handleSave(isChecked, isOpen);
   };
+
+  const handleSetOpen = (isOpen: boolean) => {
+    setIsOpen(isOpen);
+    handleSave(checked, isOpen);
+  };
+
+  const handleSave = async (isChecked: boolean, isOpen: boolean) => {
+    const { id } = item;
+
+    await remove('items', id);
+    await save('items', {
+      id,
+      isChecked,
+      isOpen,
+    });
+  }
 
   useEffect(() => {
     setHasChildren(!!Object.keys(items).length);
   }, [items]);
+
+  useEffect(() => {
+    const { id } = item;
+    const handleGet = async () => {
+      const { result } = await get('items', id);
+      if (result) {
+        setChecked(result?.isChecked);
+        setIsOpen(result?.isOpen);
+      }
+    };
+
+
+    handleGet();
+  }, [get, item]);
 
   useEffect(() => {
     setChecked(isParentChecked);
@@ -47,7 +80,7 @@ export default function ListItem({
 
         {hasChildren
           ? (
-            <S.IconButton onClick={() => setIsOpen(!isOpen)}>
+            <S.IconButton onClick={() => handleSetOpen(!isOpen)}>
               <Icon name={isOpen ? 'chevron-up-solid': 'chevron-down-solid' } width="12px" fill="var(--grey-dark)" />
             </S.IconButton>
           )
