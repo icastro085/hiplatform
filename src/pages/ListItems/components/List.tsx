@@ -8,8 +8,13 @@ interface Props {
 export default function List({ items }: Props) {
   return (
     <ul>
-      {Object.entries(items).map(([index, item]) => {
-        return <ListItem key={item.id} item={item} />
+      {Object.entries(items).map(([, item]) => {
+        const { children = {} } = item;
+        return (
+          <ListItem key={item.id} item={item}>
+            {Object.keys(children).length ? <List items={children} /> : null}
+          </ListItem>
+        );
       })}
     </ul>
   )
