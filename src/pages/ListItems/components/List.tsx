@@ -1,25 +1,40 @@
 import { IItems } from '../../../models/Items';
 
-import ListItem from './ListItem';
+import ListItem, { ParentState } from './ListItem';
 import * as S from './styles';
 
 interface Props {
   items: IItems;
-  isParentChecked?: boolean;
+  parentId?: string;
+  onChildChangeCheckbox?: () => void;
+  parentState?: ParentState,
 }
 
-export default function List({ items, isParentChecked = false }: Props) {
+export default function List({
+  items,
+  parentId,
+  onChildChangeCheckbox = () => null,
+  parentState,
+}: Props) {
   return (
     <S.List>
       {Object.entries(items).map(([, item]) => {
-        const { children = {} } = item;
-
         return (
           <ListItem
             key={item.id}
             item={item}
-            isParentChecked={isParentChecked}
-            renderSubItems={(isParentChecked) => <List items={children} isParentChecked={isParentChecked} />} />
+            parentId={parentId}
+            parentState={parentState}
+            onChangeCheckbox={onChildChangeCheckbox}
+            renderSubItems={({ items, onChildChangeCheckbox, parentState }) => {
+              return (
+                <List
+                  items={items}
+                  parentId={item.id}
+                  onChildChangeCheckbox={onChildChangeCheckbox}
+                  parentState={parentState} />
+              )}
+            } />
         );
       })}
     </S.List>

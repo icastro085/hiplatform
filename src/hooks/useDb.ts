@@ -18,9 +18,11 @@ export const useDb = () => {
   
   const save = async (table: string, data: any): Promise<any> => {
     try {
-      const result = new Promise((resolved, rejected) => {
+      const result = new Promise(async (resolved, rejected) => {
+        const { result } = await get(table, data.id);
+
         const transaction = getTransaction(db, table);
-        const request = transaction.put(data);
+        const request = transaction.put({ ...result, ...data });
       
         request.onsuccess = (e: any) => resolved(onSuccess(e));
         request.onerror = (e: any) => rejected(onError(e));
@@ -48,25 +50,12 @@ export const useDb = () => {
     }
   };
 
-  const remove = async (table: string, id: string): Promise<any> => {
-    try {
-      const result = new Promise((resolved, rejected) => {
-        const transaction = getTransaction(db, table);
-        const request = transaction.delete(id);
-      
-        request.onsuccess = (e: any) => resolved(onSuccess(e));
-        request.onerror = (e: any) => rejected(onError(e));
-      });
-
-      return result;
-    } catch {
-      return null;
-    }
-  };
+  const getAll = async (table: string, ids: string[]) =>
+    Promise.all(ids.map((id: string) => get(table, id)));
 
   return {
     save,
     get,
-    remove,
+    getAll,
   };
 };

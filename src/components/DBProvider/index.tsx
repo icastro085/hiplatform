@@ -9,6 +9,7 @@ export const DBContext = createContext(null);
 
 export default function DBProvider({ children }: Props) {
   const [db, setDb] = useState();
+  const [state, setState] = useState({});
 
   useEffect(() => {
     const getDb = async () => {
@@ -24,7 +25,7 @@ export default function DBProvider({ children }: Props) {
   }
 
   return (
-    <DBContext.Provider value={{ db } as any}>
+    <DBContext.Provider value={{ db, state, setState } as any}>
       {children}
     </DBContext.Provider>
   );
