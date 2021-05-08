@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 
+import Checkbox from '../../../components/Checkbox';
+import Icon from '../../../components/Icon';
+
 import { IItem } from "../../../models/Items";
 
 interface Props {
@@ -35,15 +38,16 @@ export default function ListItem({
 
   return (
     <li>
-      <input
-        data-testid="#checkbox-item"
-        type="checkbox"
-        checked={checked}
-        onChange={(e) => handleOnChangeCheckbox(e.target.checked)} />
-      <label>{checked ? 'checked-icon' : 'unckecked-icon'}</label>
+      <Checkbox checked={checked} onChange={handleOnChangeCheckbox} />
 
       <label>{name}</label>
-      {hasChildren ? <button onClick={() => setIsOpen(!isOpen)}>open-icon</button> : null}
+      {hasChildren
+        ? (
+          <button onClick={() => setIsOpen(!isOpen)}>
+            <Icon name={isOpen ? 'chevron-up-solid': 'chevron-down-solid' } width="12px" />
+          </button>
+        )
+        : null}
       {hasChildren && isOpen ? renderSubItems(checked) : null}
     </li>
   );
