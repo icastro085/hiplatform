@@ -21,7 +21,7 @@ test('should render children component with no items', async () => {
     children: {},
   };
 
-  render(<ListItem item={item}>test-children</ListItem>);
+  render(<ListItem item={item} renderSubItems={() => <>test-children</>} />);
 
   expect(await screen.queryByText('test-children')).not.toBeInTheDocument();
 });
@@ -40,11 +40,31 @@ test('should render children component with items', async () => {
   };
 
   await act(async() => {
-    render(<ListItem item={item}>test-children</ListItem>);
+    render(<ListItem item={item} renderSubItems={() => <>test-children</>} />);
   });
 
   expect(await screen.queryByText('test-children')).not.toBeInTheDocument();
 
   await fireEvent.click(await screen.getByText('open-icon'));
   expect(screen.queryByText('test-children')).toBeInTheDocument();
+});
+
+test('should dispacth onChangeCheckbox', async () => {
+  const item: IItem = {
+    id: 'id-01',
+    name: 'Test 01',
+    children: {},
+  };
+
+  const onChangeCheckbox = jest.fn();
+
+  render(<ListItem item={item} onChangeCheckbox={onChangeCheckbox} />);
+
+  expect(onChangeCheckbox).not.toHaveBeenCalled();
+
+  await fireEvent.click(await screen.getByTestId('#checkbox-item'));
+  expect(onChangeCheckbox).toHaveBeenCalledWith(true);
+
+  await fireEvent.click(await screen.getByTestId('#checkbox-item'));
+  expect(onChangeCheckbox).toHaveBeenCalledWith(false);
 });

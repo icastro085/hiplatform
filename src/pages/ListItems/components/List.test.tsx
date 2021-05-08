@@ -114,3 +114,40 @@ test('should render all sub-items', async () => {
   expect(await screen.queryByText('Test 03')).toBeInTheDocument();
   expect(await screen.queryByText('Test 04')).toBeInTheDocument();
 });
+
+test('should change checkbox as true and apply for the subitems', async () => {
+  const items: IItems = {
+    '0': {
+      id: 'id-01',
+      name: 'Test 01',
+      children: {
+        '0': {
+          id: 'id-02',
+          name: 'Test 02',
+          children: {
+            '0': {
+              id: 'id-03',
+              name: 'Test 03',
+              children: {},
+            },
+            '1': {
+              id: 'id-04',
+              name: 'Test 04',
+              children: {},
+            }
+          },
+        }
+      },
+    }
+  };
+
+  render(<List items={items} />);
+
+  await fireEvent.click(await screen.getAllByTestId('#checkbox-item')[0]);
+  await fireEvent.click(await screen.getAllByText('open-icon')[0]);
+
+  expect(await screen.queryAllByText('checked-icon')).toHaveLength(2);
+
+  await fireEvent.click(await screen.getAllByText('open-icon')[1]);
+  expect(await screen.queryAllByText('checked-icon')).toHaveLength(4);
+});
