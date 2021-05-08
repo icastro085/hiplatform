@@ -27,7 +27,7 @@ export default function ListItem({
 
   useEffect(() => {
     setHasChildren(!!Object.keys(items).length);
-  }, []);
+  }, [items]);
 
   useEffect(() => {
     setChecked(isParentChecked);
@@ -43,7 +43,7 @@ export default function ListItem({
       <label>{checked ? 'checked-icon' : 'unckecked-icon'}</label>
 
       <label>{name}</label>
-      <button onClick={() => setIsOpen(!isOpen)}>open-icon</button>
+      {hasChildren ? <button onClick={() => setIsOpen(!isOpen)}>open-icon</button> : null}
       {hasChildren && isOpen ? renderSubItems(checked) : null}
     </li>
   );
