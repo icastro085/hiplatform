@@ -11,7 +11,7 @@ test('should render component with name', async () => {
 
   render(<ListItem item={item} />);
 
-  expect(await screen.queryByText('Test 01')).toBeInTheDocument();
+  expect(screen.queryByText('Test 01')).toBeInTheDocument();
 });
 
 test('should render children component with no items', async () => {
@@ -23,7 +23,7 @@ test('should render children component with no items', async () => {
 
   render(<ListItem item={item} renderSubItems={() => <>test-children</>} />);
 
-  expect(await screen.queryByText('test-children')).not.toBeInTheDocument();
+  expect(screen.queryByText('test-children')).not.toBeInTheDocument();
 });
 
 test('should render children component with items', async () => {
@@ -43,9 +43,9 @@ test('should render children component with items', async () => {
     render(<ListItem item={item} renderSubItems={() => <>test-children</>} />);
   });
 
-  expect(await screen.queryByText('test-children')).not.toBeInTheDocument();
+  expect(screen.queryByText('test-children')).not.toBeInTheDocument();
 
-  await fireEvent.click(await screen.getByText('open-icon'));
+  await fireEvent.click(screen.getByText('open-icon'));
   expect(screen.queryByText('test-children')).toBeInTheDocument();
 });
 
@@ -62,9 +62,9 @@ test('should dispacth onChangeCheckbox', async () => {
 
   expect(onChangeCheckbox).not.toHaveBeenCalled();
 
-  await fireEvent.click(await screen.getByTestId('#checkbox-item'));
+  await fireEvent.click(screen.getByTestId('#checkbox-item'));
   expect(onChangeCheckbox).toHaveBeenCalledWith(true);
 
-  await fireEvent.click(await screen.getByTestId('#checkbox-item'));
+  await fireEvent.click(screen.getByTestId('#checkbox-item'));
   expect(onChangeCheckbox).toHaveBeenCalledWith(false);
 });
