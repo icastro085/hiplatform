@@ -19,7 +19,7 @@ export const IconButton = styled.button`
 `;
 
 export const ListItemContainer = styled.div`
-  padding: 8px 24px;
+  padding: 0 24px;
   border-radius: 2px;
 
   &:hover {
@@ -27,7 +27,7 @@ export const ListItemContainer = styled.div`
   }
 `;
 
-export const ListItemLabel = styled.label`
+export const ListItemLabel = styled.span`
   word-break: break-all;
 `;
 

@@ -9,9 +9,10 @@ interface Props {
   checked: boolean;
   onChange?: (isChecked: boolean) => void;
   className?: string;
+  children?: any;
 }
 
-export default function Checkbox({ checked, onChange = () => null, className }: Props) {
+export default function Checkbox({ checked, onChange = () => null, className, children }: Props) {
   const forId = useRef(uuid());
 
   const handleOnChangeCheckbox = (isChecked: boolean): void => {
@@ -29,6 +30,7 @@ export default function Checkbox({ checked, onChange = () => null, className }: 
         className="display-none" />
       <S.LabelCheckbox htmlFor={forId.current} className={className}>
         <Icon name={checked ? 'check-square-solid' : 'square-regular' } fill="var(--blue)" width="16px" />
+        {children}
       </S.LabelCheckbox>
     </>
   )
