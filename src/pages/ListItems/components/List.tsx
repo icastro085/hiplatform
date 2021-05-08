@@ -1,5 +1,7 @@
 import { IItems } from '../../../models/Items';
+
 import ListItem from './ListItem';
+import * as S from './styles';
 
 interface Props {
   items: IItems;
@@ -8,7 +10,7 @@ interface Props {
 
 export default function List({ items, isParentChecked = false }: Props) {
   return (
-    <ul>
+    <S.List>
       {Object.entries(items).map(([, item]) => {
         const { children = {} } = item;
 
@@ -20,6 +22,6 @@ export default function List({ items, isParentChecked = false }: Props) {
             renderSubItems={(isParentChecked) => <List items={children} isParentChecked={isParentChecked} />} />
         );
       })}
-    </ul>
+    </S.List>
   )
 }

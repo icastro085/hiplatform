@@ -26,3 +26,16 @@ export const ListItemContainer = styled.div`
     background-color: var(--grey);
   }
 `;
+
+export const ListItemLabel = styled.label`
+  word-break: break-all;
+`;
+
+export const List = styled.ul`
+  margin: 0;
+  padding: 0;
+
+  & ${ListItem} ul {
+    margin-left: 34px;
+  }
+`;

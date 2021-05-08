@@ -42,7 +42,7 @@ export default function ListItem({
       <S.ListItemContainer className="flex justify-between items-center">
         <div className="flex items-center">
           <Checkbox checked={checked} onChange={handleOnChangeCheckbox} className="mr2" />
-          <label>{name}</label>
+          <S.ListItemLabel>{name}</S.ListItemLabel>
         </div>
 
         {hasChildren
