@@ -88,9 +88,9 @@ test('should dispacth onChangeCheckbox', async () => {
 
   expect(onChangeCheckbox).not.toHaveBeenCalled();
 
-  await fireEvent.click(screen.getByTestId('#checkbox-item'));
-  expect(onChangeCheckbox).toHaveBeenCalledWith(true);
+  await act(async () => {
+    await fireEvent.click(screen.getByTestId('#checkbox-item'));
+  });
 
-  await fireEvent.click(screen.getByTestId('#checkbox-item'));
-  expect(onChangeCheckbox).toHaveBeenCalledWith(false);
+  expect(onChangeCheckbox).toHaveBeenCalled();
 });
