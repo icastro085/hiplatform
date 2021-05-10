@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import List from './List';
 import { IItems } from '../../../models/Items';
 
@@ -98,7 +98,9 @@ test('should render sub-items after click to show', async () => {
   expect(screen.queryByText('Test 01')).toBeInTheDocument();
   expect(screen.queryByText('Test 02')).not.toBeInTheDocument();
 
-  await fireEvent.click(screen.getByText('open-icon'));
+  await act(async () => {
+    await fireEvent.click(screen.getByText('open-icon'));
+  });
 
   expect(screen.queryByText('Test 02')).toBeInTheDocument();
 });
@@ -136,10 +138,16 @@ test('should render all sub-items', async () => {
   expect(screen.queryByText('Test 03')).not.toBeInTheDocument();
   expect(screen.queryByText('Test 04')).not.toBeInTheDocument();
 
-  await fireEvent.click(screen.getAllByText('open-icon')[0]);
+  await act(async () => {
+    await fireEvent.click(screen.getAllByText('open-icon')[0]);
+  });
+
   expect(screen.queryByText('Test 02')).toBeInTheDocument();
 
-  await fireEvent.click(await screen.getAllByText('open-icon')[1]);
+  await act(async () => {
+    await fireEvent.click(await screen.getAllByText('open-icon')[1]);
+  });
+
   expect(screen.queryByText('Test 03')).toBeInTheDocument();
   expect(screen.queryByText('Test 04')).toBeInTheDocument();
 });
@@ -172,11 +180,16 @@ test('should change checkbox as true and apply for the subitems', async () => {
 
   render(<List items={items} />);
 
-  await fireEvent.click(await screen.getAllByTestId('#checkbox-item')[0]);
-  await fireEvent.click(await screen.getAllByText('open-icon')[0]);
+  await act(async () => {
+    await fireEvent.click(await screen.getAllByTestId('#checkbox-item')[0]);
+    await fireEvent.click(await screen.getAllByText('open-icon')[0]);
+  });
 
   expect(screen.queryAllByText('checked-icon')).toHaveLength(2);
 
-  await fireEvent.click(await screen.getAllByText('open-icon')[1]);
+  await act(async () => {
+    await fireEvent.click(await screen.getAllByText('open-icon')[1]);
+  });
+
   expect(screen.queryAllByText('checked-icon')).toHaveLength(4);
 });
